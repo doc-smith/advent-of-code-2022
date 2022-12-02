@@ -44,7 +44,7 @@ fn top_k<T: Ord + Copy>(xs: &[T], k: usize) -> Vec<T> {
 }
 
 fn part_two(supplies: &[u64]) -> u64 {
-    top_k(&supplies, 3).iter().sum()
+    top_k(supplies, 3).iter().sum()
 }
 
 fn main() {
