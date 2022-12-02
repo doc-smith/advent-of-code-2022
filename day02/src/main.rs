@@ -31,22 +31,6 @@ impl Sign {
     }
 }
 
-enum Outcome {
-    Win,
-    Loss,
-    Draw,
-}
-
-impl Outcome {
-    fn cost(&self) -> u32 {
-        match self {
-            Outcome::Win => 6,
-            Outcome::Loss => 0,
-            Outcome::Draw => 3,
-        }
-    }
-}
-
 struct Round {
     opponent: Sign,
     you: Sign,
@@ -81,14 +65,14 @@ fn read_rounds() -> Vec<Round> {
 }
 
 fn score_round(you: &Sign, opponent: &Sign) -> u32 {
-    let outcome = if you.wins(opponent) {
-        Outcome::Win
+    let outcome_cost = if you.wins(opponent) {
+        6
     } else if opponent.wins(you) {
-        Outcome::Loss
+        0
     } else {
-        Outcome::Draw
+        3
     };
-    outcome.cost() + you.cost()
+    outcome_cost + you.cost()
 }
 
 fn part_one(rounds: &[Round]) -> u32 {
