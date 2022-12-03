@@ -61,7 +61,7 @@ fn part_two(backpacks: &[Backpack]) -> u32 {
         .map(|group|
             if let Some(x) = find_first_common(
                 group[0].items(),
-                &[&group[1].items(), &group[2].items()]
+                &[group[1].items(), group[2].items()]
             ) {
                 score_item(x).unwrap() as u32
             } else {
@@ -70,6 +70,7 @@ fn part_two(backpacks: &[Backpack]) -> u32 {
         )
         .sum()
 }
+
 
 fn main() {
     let backpacks = read_backpacks();
