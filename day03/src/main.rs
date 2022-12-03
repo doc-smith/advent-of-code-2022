@@ -18,6 +18,9 @@ fn read_backpacks() -> Vec<Backpack> {
         let items = line
             .expect("failed to read line")
             .into_bytes();
+        items.iter().for_each(|&item| {
+            assert!(item.is_ascii_alphabetic(), "items must be ascii alphabetic");
+        });
         backpacks.push(Backpack { items });
     }
     backpacks
@@ -45,9 +48,7 @@ fn part_one(backpacks: &[Backpack]) -> u32 {
         .map(|b| {
             let (xs, ys) = b.compartments();
             if let Some(x) = find_first_common(xs, &[ys]) {
-                let score = score_item(x)
-                    .unwrap_or_else(|| panic!("invalid item: {}", x));
-                score as u32
+                score_item(x).unwrap() as u32
             } else {
                 panic!("invalid backpack");
             }
@@ -62,9 +63,7 @@ fn part_two(backpacks: &[Backpack]) -> u32 {
                 group[0].items(),
                 &[&group[1].items(), &group[2].items()]
             ) {
-                let score = score_item(x)
-                    .unwrap_or_else(|| panic!("invalid item: {}", x));
-                score as u32
+                score_item(x).unwrap() as u32
             } else {
                 panic!("invalid backpack");
             }
