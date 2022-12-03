@@ -47,11 +47,9 @@ fn part_one(backpacks: &[Backpack]) -> u32 {
         .iter()
         .map(|b| {
             let (xs, ys) = b.compartments();
-            if let Some(x) = find_first_common(xs, &[ys]) {
-                score_item(x).unwrap() as u32
-            } else {
-                panic!("invalid backpack");
-            }
+            find_first_common(xs, &[ys])
+                .map(|x| score_item(x).unwrap() as u32)
+                .unwrap_or_else(|| panic!("invalid backpack"))
         })
         .sum()
 }
@@ -59,18 +57,12 @@ fn part_one(backpacks: &[Backpack]) -> u32 {
 fn part_two(backpacks: &[Backpack]) -> u32 {
     backpacks.chunks_exact(3)
         .map(|group|
-            if let Some(x) = find_first_common(
-                group[0].items(),
-                &[group[1].items(), group[2].items()]
-            ) {
-                score_item(x).unwrap() as u32
-            } else {
-                panic!("invalid backpack");
-            }
+            find_first_common(group[0].items(), &[group[1].items(), group[2].items()])
+                .map(|x| score_item(x).unwrap() as u32)
+                .unwrap_or_else(|| panic!("invalid backpack"))
         )
         .sum()
 }
-
 
 fn main() {
     let backpacks = read_backpacks();
