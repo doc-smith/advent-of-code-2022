@@ -1,8 +1,5 @@
-[workspace]
+[package]
+name = "advent-of-code-2022"
+version = "0.1.0"
+edition = "2021"
 
-members = [
-    "day01",
-    "day02",
-    "day03",
-    "day04",
-]
