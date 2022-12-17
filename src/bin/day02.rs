@@ -45,19 +45,18 @@ fn decode_sign(c: char) -> Sign {
     }
 }
 
-fn read_rounds() -> Vec<Round> {
+fn read_input() -> Vec<Round> {
     let mut rounds = Vec::new();
     for line in std::io::stdin().lines() {
-        let line = line
-            .expect("Failed to read line");
+        let line = line.expect("Failed to read line");
         match line.trim().as_bytes() {
-            [ opponent, b' ', you ] => {
+            [opponent, b' ', you] => {
                 let round = Round {
                     opponent: decode_sign(*opponent as char),
                     you: decode_sign(*you as char),
                 };
                 rounds.push(round);
-            },
+            }
             _ => panic!("invalid input format on line: {}", line),
         }
     }
@@ -76,24 +75,28 @@ fn score_round(you: &Sign, opponent: &Sign) -> u32 {
 }
 
 fn part_one(rounds: &[Round]) -> u32 {
-    rounds.iter().map(|round| {
-        score_round(&round.you, &round.opponent)
-    }).sum()
+    rounds
+        .iter()
+        .map(|round| score_round(&round.you, &round.opponent))
+        .sum()
 }
 
 fn part_two(rounds: &[Round]) -> u32 {
-    rounds.iter().map(|round| {
-        let you = match round.opponent {
-            Sign::Rock => round.opponent.loses_to(),
-            Sign::Paper => Sign::Paper,
-            Sign::Scissors => round.opponent.beats(),
-        };
-        score_round(&you, &round.opponent)
-    }).sum()
+    rounds
+        .iter()
+        .map(|round| {
+            let you = match round.opponent {
+                Sign::Rock => round.opponent.loses_to(),
+                Sign::Paper => Sign::Paper,
+                Sign::Scissors => round.opponent.beats(),
+            };
+            score_round(&you, &round.opponent)
+        })
+        .sum()
 }
 
 fn main() {
-    let rounds = read_rounds();
+    let rounds = read_input();
     println!("{}", part_one(&rounds));
     println!("{}", part_two(&rounds));
 }
