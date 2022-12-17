@@ -67,14 +67,18 @@ fn read_input() -> Input {
     Input { stacks, commands }
 }
 
-fn part_one(input: &Input) -> String {
+fn manipulate<F>(input: &Input, mut crane: F) -> String
+where
+    F: FnMut(Vec<u8>, &mut Vec<u8>)
+{
     let mut stacks = input.stacks.clone();
 
     for cmd in &input.commands {
-        for _ in 0..cmd.cnt {
-            let c = stacks[cmd.from - 1].pop().unwrap();
-            stacks[cmd.to - 1].push(c);
-        }
+        let from = &mut stacks[cmd.from - 1];
+        crane(
+            from.drain(from.len() - cmd.cnt..).collect(),
+            &mut stacks[cmd.to - 1],
+        );
     }
 
     stacks.iter().map(
@@ -82,18 +86,20 @@ fn part_one(input: &Input) -> String {
     ).collect()
 }
 
+fn part_one(input: &Input) -> String {
+    manipulate(
+        input,
+        |pile, to| {
+            for &c in pile.iter().rev() {
+                to.push(c);
+            }
+        })
+}
+
 fn part_two(input: &Input) -> String {
-    let mut stacks = input.stacks.clone();
-
-    for cmd in &input.commands {
-        let from = &mut stacks[cmd.from - 1];
-        let crates: Vec<_> = from.drain(from.len() - cmd.cnt..).collect();
-        stacks[cmd.to - 1].extend(crates);
-    }
-
-    stacks.iter().map(
-        |stack| *stack.last().unwrap() as char
-    ).collect()
+    manipulate(
+        input,
+        |pile, to| to.extend(pile))
 }
 
 fn main() {
