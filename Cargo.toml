@@ -3,3 +3,5 @@ name = "advent-of-code-2022"
 version = "0.1.0"
 edition = "2021"
 
+[dependencies]
+regex = "1.7.0"
